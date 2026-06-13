@@ -1,18 +1,23 @@
 {
   "expo": {
-    "name": "sasa",
-    "slug": "sasa",
+    "name": "fitted",
+    "slug": "fitted",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sasa",
-    "userInterfaceStyle": "automatic",
+    "scheme": "fitted",
+    "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "infoPlist": {
+        "NSCameraUsageDescription": "fitted uses the camera to photograph your clothes and your fit pics.",
+        "NSPhotoLibraryUsageDescription": "fitted lets you pick clothing photos from your library.",
+        "NSLocationWhenInUseUsageDescription": "fitted checks the weather where you are to pick outfits that match the day."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#FFF6FB",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -20,7 +25,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -28,11 +33,18 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FFF6FB",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
           }
+        }
+      ],
+      "expo-sqlite",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "fitted checks the weather where you are to pick outfits that match the day."
         }
       ]
     ],

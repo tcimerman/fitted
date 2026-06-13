@@ -1,56 +1,50 @@
-# Welcome to your Expo app 👋
+# fitted — tvoj fit, ale zábavnejšie ✨
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+AI pomocník do šatníka, postavený v **Expo** (primárne iOS, funguje aj Android a web). Odfotíš si oblečenie, povieš appke o svojom dni a ona ti vyskladá outfity **z vecí, ktoré naozaj vlastníš** — s ohľadom na počasie, s výmenou jednotlivých kúskov a s AI „try-on" náhľadom, kde vidíš *seba* v danom outfite.
 
-## Get started
+Appka implementuje **FITTED Sorbet brand book** (pozri priečinok `design/`): fonty Gabarito × Hanken Grotesk, cukríková paleta, pružná animácia, hravý kamarátsky tón písaný malými písmenami.
 
-1. Install dependencies
+> 📖 **Si nový v tomto projekte a chceš ho prevziať?** Otvor **[`NAVOD.md`](./NAVOD.md)** — je to kompletný návod po slovensky: od inštalácie cez to, ako appka funguje, až po to, ako z nej spraviť reálnu appku v App Store / Google Play.
+>
+> 🤖 **Pracuješ s Claude / AI agentom?** Súbor **[`AGENTS.md`](./AGENTS.md)** ho naladí na tento projekt — pozná architektúru, dôležité rozhodnutia a vie ťa krok za krokom previesť.
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Rýchly štart
 
 ```bash
-npm run reset-project
+npm install
+cp .env.example .env       # potom doň vlož svoj Gemini kľúč
+npx expo start             # naskenuj QR kód appkou Expo Go
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Bezplatný Gemini API kľúč získaš na **https://aistudio.google.com/apikey**.
 
-### Other setup steps
+> ⚠️ **Pozor na kľúč.** Kľúč je napojený cez `EXPO_PUBLIC_GEMINI_API_KEY`, čo znamená, že sa **zabuduje priamo do balíka appky**. Pre tento lokálny prototyp je to v poriadku, ale **takto NIKDY nepúšťaj produkčný build do obchodu** — najprv schovaj AI volania za malý proxy backend (detaily v `NAVOD.md`). Appka beží aj bez kľúča — AI funkcie len ukážu milé hlášky typu „ai is napping".
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+---
 
-## Learn more
+## Čo appka vie
 
-To learn more about developing your project with Expo, look at the following resources:
+- **Onboarding** — email → meno → štýlový vibe → poloha/počasie → fotky postavy (spredu/zboku/zozadu) → fotka tváre → prvé kúsky do šatníka. Dá sa prerušiť a vrátiť sa, fotky sa dajú preskočiť.
+- **Today (Dnes)** — pozdrav + živé počasie (Open-Meteo, bez kľúča), políčko na napísanie príležitosti („pracovná porada, potom večera…"), prepínače slotov (vrch/spodok/topánky/ponožky/doplnky/vrchné oblečenie), 2–3 prejditeľné AI návrhy outfitov s výmenou kúskov cez ◀ ▶ (okamžitá, bez ďalších API volaní), remix, obľúbené a **wear it ✨** → konfety + try-on render.
+- **Closet (Šatník)** — vyhľadávateľná a filtrovateľná mriežka. Každý pridaný kúsok AI oštítkuje (kategória, farby, štýl, teplota, formálnosť) a na pozadí ho prerenderuje ako čistú „studio" fotku na bielom pozadí.
+- **Saved (Uložené)** — obľúbené + história „outfit dňa" s try-on obrázkami.
+- **You (Ty)** — profil, prefotenie fotiek, štýlové preferencie, mesto/jednotky, prepínače, stav AI, vymazanie všetkých dát. (Skrytý odkaz na galériu komponentov je úplne dole.)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## Architektúra v skratke
 
-Join our community of developers creating universal apps.
+- **Lokálne v1**: žiadny backend. SQLite (`expo-sqlite`) na oblečenie/outfity, AsyncStorage na profil/nastavenia (zustand persist), `expo-file-system` na všetky obrázky. Žiadny base64 sa nikdy neukladá do databázy.
+- **AI**: Gemini cez obyčajný `fetch` — `gemini-2.5-flash` na vizuálne štítkovanie + uvažovanie nad outfitmi (štruktúrované JSON s následnou kontrolou ID), `gemini-2.5-flash-image` na vylepšenie produktových fotiek a virtuálny try-on.
+- **Vrstvy**: obrazovky (`src/app`) → zustand stores (`src/store`) → čisté služby (`src/services`). Brand tokeny v `src/theme`, Sorbet komponenty v `src/components/sorbet`.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+## Kontroly
+
+```bash
+npx tsc --noEmit     # typová kontrola
+npx expo lint        # linter
+```

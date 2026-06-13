@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FITTED — Brand Book Variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Mulish:ital,wght@0,300;0,400;0,500;0,600;1,400&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&amp;family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Young+Serif&amp;family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Archivo:wght@400;600;800;900&amp;family=Instrument+Serif:ital@0;1&amp;family=Gabarito:wght@500;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  #root { height: 100%; }
+  .bb-sheet { box-sizing: border-box; }
+  .bb-sheet *, .bb-sheet *::before, .bb-sheet *::after { box-sizing: border-box; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="brand-sheets.jsx"></script>
+<script type="text/babel" src="brand-sheets-2.jsx"></script>
+<script type="text/babel" src="brand-symbols.jsx"></script>
+<script type="text/babel" src="brand-sheets-3.jsx"></script>
+<script type="text/babel" src="logo-favicon.jsx"></script>
+<script type="text/babel" src="app-icons.jsx"></script>
+<script type="text/babel" src="app-themes.jsx"></script>
+<script type="text/babel" src="app-screens.jsx"></script>
+<script type="text/babel">
+  const { DesignCanvas, DCSection, DCArtboard, DCPostIt, SheetAtelier, SheetPop, SheetMidnight, SheetRiviera, SheetZine, SheetBloom, AppHome, AppCloset, fittedAppThemes, LogoExplorations, FaviconExplorations, SheetSage, SheetStudio, SheetSorbet } = window;
+
+  const screenThemes = [
+    ["atelier", "A · Atelier"],
+    ["pop", "B · Pop"],
+    ["riviera", "D · Riviera"],
+    ["bloom", "F · Bloom"],
+    ["midnight", "C · Midnight"],
+  ];
+
+  function App() {
+    return (
+      <DesignCanvas>
+        <DCSection
+          id="brandbook"
+          title="FITTED — Brand Book"
+          subtitle="Three brand directions for the wardrobe-helper fashion app · same product, three personalities"
+        >
+          <DCArtboard id="dir-a" label="A · Atelier — quiet luxury" width={880}>
+            <SheetAtelier></SheetAtelier>
+          </DCArtboard>
+          <DCArtboard id="dir-b" label="B · Pop — playful energy" width={880}>
+            <SheetPop></SheetPop>
+          </DCArtboard>
+          <DCArtboard id="dir-c" label="C · Midnight — sleek tech" width={880}>
+            <SheetMidnight></SheetMidnight>
+          </DCArtboard>
+        </DCSection>
+        <DCSection
+          id="brandbook-2"
+          title="Round 2 — building on A &amp; B"
+          subtitle="D blends Atelier's refinement with Pop's warmth · E pushes the editorial side further · F softens Pop into something cozier"
+        >
+          <DCArtboard id="dir-d" label="D · Riviera — warm elegance (A × B)" width={880}>
+            <SheetRiviera></SheetRiviera>
+          </DCArtboard>
+          <DCArtboard id="dir-e" label="E · Zine — editorial collage (A, louder)" width={880}>
+            <SheetZine></SheetZine>
+          </DCArtboard>
+          <DCArtboard id="dir-f" label="F · Bloom — soft & fresh (B, gentler)" width={880}>
+            <SheetBloom></SheetBloom>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection
+          id="logo-lab"
+          title="Logo &amp; favicon — new explorations"
+          subtitle="Fresh marks and wordmarks, plus app icons shown at real 32px / 16px favicon scale to test legibility"
+        >
+          <DCArtboard id="logo-explorations" label="Logo lab — lockups &amp; wordmarks" width={880}>
+            <LogoExplorations></LogoExplorations>
+          </DCArtboard>
+          <DCArtboard id="favicon-explorations" label="App icon &amp; favicon grid" width={880}>
+            <FaviconExplorations></FaviconExplorations>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection
+          id="brandbook-3"
+          title="Round 3 — three new directions"
+          subtitle="G · Sage (natural &amp; calm) · H · Studio (bold fashion-week) · I · Sorbet (vivid &amp; fun)"
+        >
+          <DCArtboard id="dir-g" label="G · Sage — natural &amp; calm" width={880}>
+            <SheetSage></SheetSage>
+          </DCArtboard>
+          <DCArtboard id="dir-h" label="H · Studio — bold fashion-week" width={880}>
+            <SheetStudio></SheetStudio>
+          </DCArtboard>
+          <DCArtboard id="dir-i" label="I · Sorbet — vivid &amp; fun" width={880}>
+            <SheetSorbet></SheetSorbet>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection
+          id="app-home"
+          title="App — Today screen"
+          subtitle="The home page in every direction: greeting, today's weather, the matched outfit with a confidence score, and the buttons to wear or restyle it"
+        >
+          {screenThemes.map(([key, label]) => (
+            <DCArtboard key={key} id={`home-${key}`} label={`${label} · Today`} width={390}>
+              <AppHome t={fittedAppThemes[key]}></AppHome>
+            </DCArtboard>
+          ))}
+        </DCSection>
+
+        <DCSection
+          id="app-closet"
+          title="App — Choose clothes (closet)"
+          subtitle="Browse the wardrobe and tap pieces to build a look — match scores show what fits today's weather best"
+        >
+          {screenThemes.map(([key, label]) => (
+            <DCArtboard key={key} id={`closet-${key}`} label={`${label} · Closet`} width={390}>
+              <AppCloset t={fittedAppThemes[key]}></AppCloset>
+            </DCArtboard>
+          ))}
+        </DCSection>
+      </DesignCanvas>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App></App>);
+</script>
+</body>
+</html>
