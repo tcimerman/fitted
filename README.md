@@ -4,7 +4,9 @@ AI pomocník do šatníka, postavený v **Expo** (primárne iOS, funguje aj Andr
 
 Appka implementuje **FITTED Sorbet brand book** (pozri priečinok `design/`): fonty Gabarito × Hanken Grotesk, cukríková paleta, pružná animácia, hravý kamarátsky tón písaný malými písmenami.
 
-> 📖 **Si nový v tomto projekte a chceš ho prevziať?** Otvor **[`NAVOD.md`](./NAVOD.md)** — je to kompletný návod po slovensky: od inštalácie cez to, ako appka funguje, až po to, ako z nej spraviť reálnu appku v App Store / Google Play.
+> 🌱 **Úplný začiatočník (nikdy si neprogramoval)?** Začni súborom **[`PRIRUCKA.md`](./PRIRUCKA.md)** — vysvetľuje úplne od nuly, čo je GitHub, čo je frontend/backend/databáza/API kľúč, ako používať Claude a ako appku rozbehať. S obrázkami.
+>
+> 📖 **Vývojár, ktorý projekt preberá?** Otvor **[`NAVOD.md`](./NAVOD.md)** — kompletný technický návod po slovensky: od inštalácie cez to, ako appka funguje, až po to, ako z nej spraviť reálnu appku v App Store / Google Play.
 >
 > 🤖 **Pracuješ s Claude / AI agentom?** Súbor **[`AGENTS.md`](./AGENTS.md)** ho naladí na tento projekt — pozná architektúru, dôležité rozhodnutia a vie ťa krok za krokom previesť.
 
