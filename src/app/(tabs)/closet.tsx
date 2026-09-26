@@ -56,7 +56,7 @@ export default function ClosetScreen() {
       <View style={{ paddingHorizontal: 20, gap: 14, paddingBottom: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text style={type.h1}>my closet</Text>
-          <SBadge tone="grape">{garments.length} pieces</SBadge>
+          <SBadge tone="grape">{garments.length} {garments.length === 1 ? 'piece' : 'pieces'}</SBadge>
         </View>
         <SInput icon="search" placeholder="search your closet…" value={query} onChangeText={setQuery} pill />
         <FlatList

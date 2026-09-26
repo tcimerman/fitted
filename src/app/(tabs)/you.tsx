@@ -101,7 +101,7 @@ export default function YouScreen() {
         <SAvatar letter={(profile.name || 'f')[0].toLowerCase()} uri={profile.facePhotoUri} size={54} />
         <View>
           <Text style={type.h1}>{profile.name ? profile.name.toLowerCase() : 'you'}</Text>
-          <Text style={type.small}>{garmentCount} pieces in the closet</Text>
+          <Text style={type.small}>{garmentCount} {garmentCount === 1 ? 'piece' : 'pieces'} in the closet</Text>
         </View>
       </View>
 

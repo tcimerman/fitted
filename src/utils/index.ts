@@ -9,6 +9,9 @@ export const todayKey = (d = new Date()) => {
 
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+export const weekdayName = (d = new Date()) => WEEKDAYS[d.getDay()];
+
 export const dateLine = (d = new Date()) => `${DAYS[d.getDay()]} · ${d.getDate()} ${MONTHS[d.getMonth()]}`;
 
 // lowercase hype-friend greetings, rotated by hour bucket

@@ -62,7 +62,7 @@ cp .env.example .env          # vložiť Gemini kľúč
 npx expo start                # QR pre Expo Go
 npx tsc --noEmit              # typová kontrola
 npx expo lint                 # linter
-npm run reset-project         # tvrdý reset (zmaže lokálne dáta)
+# tvrdý reset dát: v appke You → clear all data (na webe aj vymazanie dát stránky v prehliadači)
 ```
 
 Po každej zmene kódu spusti `npx tsc --noEmit` a `npx expo lint`.

@@ -266,7 +266,7 @@ npx expo lint        # štýl kódu OK?
 | **QR kód sa nenačíta / appka sa nepripojí** | Telefón a počítač musia byť na rovnakej Wi-Fi. Skús v termináli `npx expo start --tunnel`. |
 | **„whoa, too fast" / rate limit** | Bezplatný Gemini má limity. Počkaj chvíľu, alebo si zvýš limit v Google AI Studio. |
 | **Appka po zmene `.env` nevidí kľúč** | Premenné `.env` sa čítajú pri štarte — vždy reštartuj `expo start`. |
-| **Zaseknutý stav / divné dáta** | V appke **You → vymazať všetky dáta**, alebo tvrdý reset projektu: `npm run reset-project`. |
+| **Zaseknutý stav / divné dáta** | V appke **You → vymazať všetky dáta**, alebo odinštaluj appku z Expo Go / vymaž dáta stránky v prehliadači (web). |
 | **Chyby po `git pull`** | Spusti znova `npm install` (mohli pribudnúť závislosti). |
 | **Denná pripomienka nič nerobí** | To je známe — notifikácie potrebujú dev build, nie Expo Go (kapitola 10). |
 

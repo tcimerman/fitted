@@ -5,6 +5,7 @@ import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SBadge, SButton, SChip, SIconButton, SSegmented, toast } from '@/components/sorbet';
+import { isConfigured } from '@/services/gemini/client';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { ALL_CATEGORIES, GarmentCategory } from '@/types';
 import { confirmAction } from '@/utils/feedback';
@@ -56,7 +57,11 @@ export default function GarmentDetail() {
         <View style={{ alignItems: 'center', marginTop: 14 }}>
           <SSegmented options={['studio', 'original']} index={view} onChange={setView} />
           {!garment.enhancedUri && view === 0 ? (
-            <Text style={[type.small, { marginTop: 8 }]}>studio glow-up still rendering — showing the original for now</Text>
+            <Text style={[type.small, { marginTop: 8 }]}>
+              {isConfigured()
+                ? 'studio glow-up still rendering — showing the original for now'
+                : 'no studio glow-up without a gemini key — showing the original'}
+            </Text>
           ) : null}
         </View>
 

@@ -18,7 +18,7 @@ import { useSettingsStore } from '@/store/useSettingsStore';
 import { Outfit, Slot } from '@/types';
 import { colors, radii } from '@/theme/tokens';
 import { fonts, type } from '@/theme/typography';
-import { dateLine, formatTemp, greeting, todayKey, weatherSummary } from '@/utils';
+import { dateLine, formatTemp, greeting, todayKey, weatherSummary, weekdayName } from '@/utils';
 import { hapticSuccess } from '@/utils/feedback';
 
 const SLOT_OPTIONS: { key: Slot; label: string }[] = [
@@ -264,7 +264,7 @@ export default function TodayScreen() {
               ) : (
                 <>
                   <Text style={{ fontSize: 44 }}>💭</Text>
-                  <Text style={[type.h3, { textAlign: 'center', marginTop: 12 }]}>tuesday’s lewk is loading</Text>
+                  <Text style={[type.h3, { textAlign: 'center', marginTop: 12 }]}>{weekdayName()}’s lewk is loading</Text>
                   <Text style={[type.bodyMuted, { textAlign: 'center', marginTop: 6 }]}>
                     tell me about your day above — or just hit send and i’ll style the weather.
                   </Text>
