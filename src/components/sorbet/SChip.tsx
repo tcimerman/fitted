@@ -18,6 +18,8 @@ export function SChip({ children, active, tone = 'punch', onPress }: SChipProps)
   return (
     <Springy
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: !!active }}
       style={{
         paddingVertical: 9, paddingHorizontal: 16, borderRadius: radii.chip,
         backgroundColor: active ? c : colors.white,

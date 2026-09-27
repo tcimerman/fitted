@@ -8,6 +8,7 @@ import { SBadge, SButton, SIconButton, SItemRow, toast } from '@/components/sorb
 import { isConfigured } from '@/services/gemini/client';
 import { useOutfitStore } from '@/store/useOutfitStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { entitlementSnapshot } from '@/store/useSubscriptionStore';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { colors, radii, shadow } from '@/theme/tokens';
 import { type } from '@/theme/typography';
@@ -25,8 +26,9 @@ export default function OutfitDetail() {
 
   if (!outfit) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.petal, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: colors.petal, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <Text style={type.bodyMuted}>this lewk is gone</Text>
+        <SButton variant="ghost" icon="arrowL" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}>back</SButton>
       </View>
     );
   }
@@ -85,7 +87,12 @@ export default function OutfitDetail() {
 
         {!outfit.tryOnUri && canTryOn ? (
           <View style={{ marginTop: 24 }}>
-            <SButton variant="secondary" full icon="sparkle" onPress={() => router.push(`/try-on/${outfit.id}` as never)}>
+            <SButton
+              variant="secondary"
+              full
+              icon="sparkle"
+              onPress={() => router.push((entitlementSnapshot().tryOnsLeft > 0 ? `/try-on/${outfit.id}` : '/paywall?reason=tryon') as never)}
+            >
               see it on you
             </SButton>
           </View>

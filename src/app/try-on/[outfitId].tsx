@@ -11,6 +11,7 @@ import { generateTryOn } from '@/services/gemini/tryOn';
 import { storeTryOnImage } from '@/services/images';
 import { useOutfitStore } from '@/store/useOutfitStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { entitlementSnapshot, useSubscriptionStore } from '@/store/useSubscriptionStore';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { colors, radii, shadow } from '@/theme/tokens';
 import { type } from '@/theme/typography';
@@ -42,6 +43,10 @@ export default function TryOnModal() {
 
   const start = React.useCallback(async () => {
     if (!outfit || outfit.tryOnUri) return;
+    if (entitlementSnapshot().tryOnsLeft <= 0) {
+      router.replace('/paywall?reason=tryon' as never);
+      return;
+    }
     const myAttempt = ++attemptRef.current;
     try {
       const ids = new Set(outfit.slots.map((s) => s.itemId));
@@ -52,6 +57,7 @@ export default function TryOnModal() {
       const updated = { ...outfit, tryOnUri };
       updateSuggestion(updated);
       await persistOutfit(updated);
+      useSubscriptionStore.getState().recordTryOn();
       setStatus('done');
       setRun((r) => r + 1);
     } catch (e) {
@@ -73,8 +79,9 @@ export default function TryOnModal() {
 
   if (!outfit) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.petal, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: colors.petal, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <Text style={type.bodyMuted}>outfit not found</Text>
+        <SButton variant="ghost" icon="arrowL" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}>back</SButton>
       </View>
     );
   }

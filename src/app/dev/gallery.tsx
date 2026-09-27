@@ -8,6 +8,9 @@ import {
   Garment, SAvatar, SBadge, SButton, SChip, SFab, SGarmentTile, SIconButton, SInput,
   SItemRow, SProgress, SSegmented, SStars, SToggle, SWeatherPill, UIcon, toast,
 } from '@/components/sorbet';
+import { buildDemoCloset } from '@/services/demoCloset';
+import { useEntitlements, useSubscriptionStore } from '@/store/useSubscriptionStore';
+import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { colors, radii } from '@/theme/tokens';
 import { fonts, type } from '@/theme/typography';
 
@@ -26,6 +29,8 @@ export default function GalleryScreen() {
   const [seg, setSeg] = React.useState(0);
   const [chip, setChip] = React.useState(0);
   const [tog, setTog] = React.useState(true);
+  const { isPlus, spinsLeft, tryOnsLeft } = useEntitlements();
+  const sub = useSubscriptionStore();
 
   return (
     <ScrollView
@@ -36,6 +41,29 @@ export default function GalleryScreen() {
         <Text style={type.h1}>sorbet kit</Text>
         <SIconButton icon="x" onPress={() => router.back()} />
       </View>
+
+      <Block title="dev · plus & limits">
+        <Text style={type.small}>
+          {isPlus ? 'plus (mock)' : 'free'} · {spinsLeft} spins left today · {tryOnsLeft} try-ons left
+        </Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          <SButton size="sm" variant="secondary" onPress={() => sub.devSetPlus(!isPlus)}>{isPlus ? 'make free' : 'make plus'}</SButton>
+          <SButton size="sm" variant="ghost" onPress={() => { sub.devMaxUsage(); toast('free limits maxed out', 'lemon'); }}>max out usage</SButton>
+          <SButton size="sm" variant="ghost" onPress={() => { sub.devResetUsage(); toast('usage reset', 'mint'); }}>reset usage</SButton>
+          <SButton
+            size="sm"
+            variant="mint"
+            onPress={() => {
+              void (async () => {
+                for (const g of buildDemoCloset()) await useWardrobeStore.getState().add(g);
+                toast('demo closet loaded — 12 pieces', 'mint', 'hanger');
+              })();
+            }}
+          >
+            load demo closet
+          </SButton>
+        </View>
+      </Block>
 
       <Block title="buttons">
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>

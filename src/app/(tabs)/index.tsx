@@ -7,10 +7,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { OutfitCard } from '@/components/today/OutfitCard';
-import { Confetti, EnterIn, SAvatar, SBadge, SButton, SChip, SWeatherPill, Springy, UIcon, toast } from '@/components/sorbet';
+import { Confetti, EnterIn, SAvatar, SBadge, SButton, SChip, SIconButton, SWeatherPill, Springy, UIcon, toast } from '@/components/sorbet';
 import { friendlyError, isConfigured } from '@/services/gemini/client';
-import { generateOutfits } from '@/services/gemini/generateOutfits';
 import { useOutfitStore } from '@/store/useOutfitStore';
+import { usePlannerStore } from '@/store/usePlannerStore';
+import { useStreak } from '@/store/useStreak';
+import { entitlementSnapshot, useEntitlements, useSubscriptionStore } from '@/store/useSubscriptionStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { useWeather } from '@/store/useWeather';
@@ -41,7 +43,12 @@ export default function TodayScreen() {
   const { weather } = useWeather();
   const unit = useSettingsStore((s) => s.unit);
   const weatherPicks = useSettingsStore((s) => s.weatherPicks);
-  const { suggestions, generating, setSuggestions, setGenerating, updateSuggestion, persistOutfit, suggestionIndex, setSuggestionIndex } = useOutfitStore();
+  const { suggestions, generating, setSuggestions, setGenerating, updateSuggestion, persistOutfit, suggestionIndex, setSuggestionIndex, spin } = useOutfitStore();
+  const { isPlus, spinsLeft, limits } = useEntitlements();
+  const recordSpin = useSubscriptionStore((s) => s.recordSpin);
+  const streak = useStreak();
+  const todaysPlan = usePlannerStore((s) => s.plans[todayKey()]);
+  const showingPlan = !!todaysPlan && suggestions.some((o) => o.id === todaysPlan.id);
 
   const [occasion, setOccasion] = React.useState('');
   const [enabledSlots, setEnabledSlots] = React.useState<Slot[]>(['top', 'bottom', 'shoes', 'outerwear']);
@@ -59,8 +66,8 @@ export default function TodayScreen() {
     setEnabledSlots((cur) => (cur.includes(key) ? cur.filter((s) => s !== key) : [...cur, key]));
 
   const generate = async (avoid: string[][] = []) => {
-    if (!isConfigured()) {
-      toast('ai is napping — add a gemini key in .env to wake it up', 'lemon', 'key');
+    if (entitlementSnapshot().spinsLeft <= 0) {
+      router.push('/paywall?reason=spins' as never);
       return;
     }
     if (garments.length < 2) {
@@ -74,7 +81,7 @@ export default function TodayScreen() {
     setGenLine(0);
     setGenerating(true);
     try {
-      const outfits = await generateOutfits({
+      const { outfits, offline } = await spin({
         occasion: occasion.trim(),
         weather: weatherPicks ? weather : undefined,
         profile,
@@ -82,9 +89,15 @@ export default function TodayScreen() {
         garments,
         avoidSets: avoid,
       });
+      if (outfits.length === 0) {
+        toast('need at least a top or a bottom in the closet to spin', 'punch', 'hanger');
+        return;
+      }
       setSuggestions(outfits, occasion.trim());
+      recordSpin();
       listRef.current?.scrollToOffset({ offset: 0, animated: false });
       hapticSuccess();
+      if (offline) toast('offline spin ✨ add a gemini key for the full ai stylist', 'lemon', 'key');
     } catch (e) {
       toast(friendlyError(e), 'punch', 'x');
     } finally {
@@ -115,13 +128,19 @@ export default function TodayScreen() {
     await persistOutfit(worn);
     setConfettiRun((r) => r + 1);
     hapticSuccess();
-    const canTryOn = !!profile.bodyPhotos.front || !!profile.facePhotoUri;
-    if (canTryOn && isConfigured()) {
-      setTimeout(() => router.push(`/try-on/${worn.id}` as never), 650);
-    } else {
-      toast('locked in — that’s today’s lewk 🔥', 'mint');
+    const canTryOn = (!!profile.bodyPhotos.front || !!profile.facePhotoUri) && isConfigured();
+    if (streak.woreToday) {
+      // streak already counted today — go straight to the try-on (or just confirm)
+      if (canTryOn) {
+        const target = entitlementSnapshot().tryOnsLeft > 0 ? `/try-on/${worn.id}` : '/paywall?reason=tryon';
+        setTimeout(() => router.push(target as never), 650);
+      } else toast('locked in — that’s today’s lewk 🔥', 'mint');
+      return;
     }
+    setTimeout(() => router.push(`/streak?outfitId=${worn.id}&tryon=${canTryOn ? 1 : 0}` as never), 650);
   };
+
+  const planIt = (outfit: Outfit) => router.push(`/planner?outfitId=${outfit.id}` as never);
 
   const toggleFavorite = async (outfit: Outfit) => {
     const fav = { ...outfit, isFavorite: !outfit.isFavorite };
@@ -147,9 +166,21 @@ export default function TodayScreen() {
             <Text style={{ fontFamily: fonts.body700, fontSize: 12, color: colors.muted, letterSpacing: 0.3 }}>{dateLine()}</Text>
             <Text style={[type.h1, { marginTop: 2 }]}>{greeting()}</Text>
           </View>
-          <Springy onPress={() => router.push('/you' as never)} haptic={false}>
-            <SAvatar letter={(profile.name || 'f')[0].toLowerCase()} uri={profile.facePhotoUri} />
-          </Springy>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Springy
+              onPress={() => router.push('/streak' as never)}
+              accessibilityRole="button"
+              accessibilityLabel={`${streak.current} day streak`}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 40, paddingHorizontal: 12, borderRadius: 999, backgroundColor: colors.white, borderWidth: 1.5, borderColor: colors.rule }}
+            >
+              <Text style={{ fontSize: 15 }}>🔥</Text>
+              <Text style={{ fontFamily: fonts.display800, fontSize: 15, color: streak.current > 0 ? colors.punch : colors.muted }}>{streak.current}</Text>
+            </Springy>
+            <SIconButton icon="calendar" size={40} onPress={() => router.push('/planner' as never)} accessibilityLabel="weekly planner" />
+            <Springy onPress={() => router.push('/you' as never)} haptic={false} accessibilityRole="button" accessibilityLabel="profile">
+              <SAvatar letter={(profile.name || 'o')[0].toLowerCase()} uri={profile.facePhotoUri} size={40} />
+            </Springy>
+          </View>
         </View>
 
         {/* weather */}
@@ -200,6 +231,37 @@ export default function TodayScreen() {
           ))}
         </ScrollView>
 
+        {/* free-tier meter (Recime-style "x of y left") */}
+        {!isPlus ? (
+          <Springy
+            onPress={() => router.push('/paywall?reason=spins' as never)}
+            accessibilityRole="button"
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 20, marginTop: 12, alignSelf: 'flex-start' }}
+          >
+            <View style={{ flexDirection: 'row', gap: 3 }}>
+              {Array.from({ length: limits.spinsPerDay }, (_, i) => (
+                <View key={i} style={{ width: 16, height: 6, borderRadius: 3, backgroundColor: i < spinsLeft ? colors.punch : colors.rule }} />
+              ))}
+            </View>
+            <Text style={type.small}>
+              {spinsLeft} of {limits.spinsPerDay} free spins left today · <Text style={{ color: colors.grape, fontFamily: fonts.body700 }}>go unlimited</Text>
+            </Text>
+          </Springy>
+        ) : null}
+
+        {/* planned for today */}
+        {todaysPlan && !showingPlan && !generating ? (
+          <Springy
+            onPress={() => setSuggestions([todaysPlan], todaysPlan.occasion)}
+            accessibilityRole="button"
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 20, marginTop: 14, backgroundColor: colors.grapeSoft, borderRadius: radii.tile, padding: 12 }}
+          >
+            <UIcon name="calendar" size={18} color={colors.grape} stroke={2.2} />
+            <Text style={[type.bodyBold, { flex: 1, color: colors.grape, fontSize: 14 }]}>you planned a fit for today — tap to see it</Text>
+            <UIcon name="arrowR" size={18} color={colors.grape} />
+          </Springy>
+        ) : null}
+
         {/* suggestions */}
         <View style={{ marginTop: 20 }}>
           {generating ? (
@@ -230,6 +292,7 @@ export default function TodayScreen() {
                       onRotateSlot={(slotKey, dir) => rotateSlot(item, slotKey, dir)}
                       onWear={() => void wearIt(item)}
                       onFavorite={() => void toggleFavorite(item)}
+                      onPlan={() => planIt(item)}
                     />
                   </View>
                 )}
@@ -264,13 +327,13 @@ export default function TodayScreen() {
               ) : (
                 <>
                   <Text style={{ fontSize: 44 }}>💭</Text>
-                  <Text style={[type.h3, { textAlign: 'center', marginTop: 12 }]}>{weekdayName()}’s lewk is loading</Text>
+                  <Text style={[type.h3, { textAlign: 'center', marginTop: 12 }]}>{weekdayName()}’s fit is one spin away</Text>
                   <Text style={[type.bodyMuted, { textAlign: 'center', marginTop: 6 }]}>
                     tell me about your day above — or just hit send and i’ll style the weather.
                   </Text>
                   {!isConfigured() ? (
                     <View style={{ marginTop: 14 }}>
-                      <SBadge tone="lemon" icon="key">ai is napping — add a gemini key in .env</SBadge>
+                      <SBadge tone="lemon" icon="key">offline spins · add a gemini key for the ai stylist</SBadge>
                     </View>
                   ) : null}
                 </>

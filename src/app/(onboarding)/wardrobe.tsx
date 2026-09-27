@@ -19,14 +19,14 @@ export default function WardrobeStep() {
 
   return (
     <StepScaffold
-      kicker="07 · stock the closet"
+      kicker="stock the closet"
       title="drop your first fits"
       body="snap a few pieces from your wardrobe — tops, bottoms, shoes. the ai tags each one and gives it a clean studio glow-up. you can add more any time."
       ctaLabel={garments.length > 0 ? `done — ${garments.length} in the closet` : 'add at least one piece'}
       ctaDisabled={garments.length === 0}
-      onNext={next}
+      onNext={() => next()}
       skipLabel="skip — closet stays empty"
-      onSkip={next}
+      onSkip={() => next()}
     >
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
         {garments.map((g) => (

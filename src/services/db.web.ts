@@ -3,7 +3,7 @@
 // stored as plain objects. Metro picks this file automatically on web.
 import { Garment, Outfit } from '@/types';
 
-const DB_NAME = 'fitted';
+const DB_NAME = 'fitted'; // legacy name from the "fitted" era — renaming would orphan local closets
 const VERSION = 1;
 
 let dbPromise: Promise<IDBDatabase> | null = null;

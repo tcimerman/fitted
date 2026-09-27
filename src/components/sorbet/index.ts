@@ -17,3 +17,5 @@ export * from './SBottomNav';
 export * from './SToast';
 export * from './SProgress';
 export * from './Confetti';
+export * from './SWordmark';
+export * from './SPlusBadge';

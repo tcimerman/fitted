@@ -28,7 +28,7 @@ export default function StyleStep() {
 
   return (
     <StepScaffold
-      kicker="03 · your vibe"
+      kicker="your vibe"
       title="how do you like to dress?"
       body="this shapes what the stylist reaches for. you can change it anytime in settings."
       ctaLabel="next"

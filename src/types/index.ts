@@ -6,6 +6,14 @@ export const ALL_SLOTS: Slot[] = ['top', 'bottom', 'shoes', 'socks', 'accessory'
 
 export type GenderPresentation = 'feminine' | 'masculine' | 'androgynous' | 'unspecified';
 
+// Answers from the onboarding quiz — personalises copy, the paywall pitch and
+// the stylist prompt. All optional so pre-OutfitSpin profiles still load.
+export interface QuizAnswers {
+  goals: string[]; // keys from ONBOARDING_GOALS
+  nothingToWear?: 'daily' | 'weekly' | 'sometimes' | 'rarely';
+  morningMinutes?: number; // typical minutes spent picking an outfit
+}
+
 export interface UserProfile {
   name: string;
   email: string;
@@ -13,6 +21,7 @@ export interface UserProfile {
   preferredStyles: string[];
   bodyPhotos: { front?: string; side?: string; back?: string };
   facePhotoUri?: string;
+  quiz?: QuizAnswers;
   createdAt: number;
 }
 

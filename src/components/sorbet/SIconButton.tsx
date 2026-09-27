@@ -10,15 +10,21 @@ interface SIconButtonProps {
   tone?: keyof typeof TONES;
   filled?: boolean;
   size?: number;
+  disabled?: boolean;
+  accessibilityLabel?: string;
   onPress?: () => void;
 }
 
-export function SIconButton({ icon = 'heart', tone = 'plum', filled, size = 46, onPress }: SIconButtonProps) {
+export function SIconButton({ icon = 'heart', tone = 'plum', filled, size = 46, disabled, accessibilityLabel, onPress }: SIconButtonProps) {
   const c = TONES[tone];
   return (
     <Springy
       onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? icon}
       style={{
+        opacity: disabled ? 0.4 : 1,
         width: size, height: size, borderRadius: size / 2, alignItems: 'center', justifyContent: 'center',
         backgroundColor: filled ? c : colors.white,
         borderWidth: 1.5, borderColor: filled ? c : colors.rule,

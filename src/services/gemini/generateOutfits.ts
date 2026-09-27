@@ -65,9 +65,9 @@ function buildPrompt(opts: GenerateOpts, correction?: string): string {
   const weatherLine = weather
     ? `today's weather in ${weather.city}: ${Math.round(weather.tempC)}°C (feels ${Math.round(weather.feelsLikeC)}°C, low ${Math.round(weather.tempMinC)}° high ${Math.round(weather.tempMaxC)}°), ${weather.summary}, ${weather.precipProbability}% chance of precipitation.`
     : 'weather unknown — assume mild.';
-  return `You are fitted, an upbeat personal stylist. Compose outfits ONLY from the user's closet catalog below.
+  return `You are OutfitSpin, an upbeat personal stylist. Compose outfits ONLY from the user's closet catalog below.
 
-USER: gender presentation ${profile.genderPresentation}; preferred styles: ${profile.preferredStyles.join(', ') || 'no strong preference'}.
+USER: gender presentation ${profile.genderPresentation}; preferred styles: ${profile.preferredStyles.join(', ') || 'no strong preference'}.${profile.quiz?.goals?.length ? `\nUSER GOALS: ${profile.quiz.goals.join(', ')} (e.g. "wear-more" = favour pieces that rarely get worn, "work" = keep it polished).` : ''}
 WEATHER: ${weatherLine}
 OCCASION: ${occasion || 'a regular day'}
 

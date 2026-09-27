@@ -37,6 +37,8 @@ export function SButton({ variant = 'primary', size = 'md', icon, full, disabled
     <Springy
       onPress={onPress}
       disabled={disabled || loading}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
       style={{
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
         backgroundColor: v.bg, borderWidth: 2, borderColor: v.bd, borderRadius: radii.pill,

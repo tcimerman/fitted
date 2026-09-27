@@ -31,14 +31,14 @@ export default function BodyPhotosStep() {
 
   return (
     <StepScaffold
-      kicker="05 · your fit model: you"
+      kicker="your fit model: you"
       title="show us your angles"
-      body="front, side, and back — these power the magic try-on, where you see yourself wearing the outfit before you commit. fitted stays on your phone."
+      body="front, side, and back — these power the magic try-on, where you see yourself wearing the outfit before you commit. photos stay on your phone."
       ctaLabel={count > 0 ? 'next' : 'add at least the front'}
       ctaDisabled={!bodyPhotos.front}
-      onNext={next}
+      onNext={() => next()}
       skipLabel="skip — no try-on for now"
-      onSkip={next}
+      onSkip={() => next()}
     >
       <View style={{ flexDirection: 'row', gap: 12 }}>
         {SLOTS.map((s) => (

@@ -23,14 +23,14 @@ export default function FacePhotoStep() {
 
   return (
     <StepScaffold
-      kicker="06 · say cheese"
+      kicker="say cheese"
       title="now your face"
       body="a clear, well-lit selfie keeps the try-on looking like you — not your distant cousin."
       ctaLabel="next"
       ctaDisabled={!facePhotoUri}
-      onNext={next}
+      onNext={() => next()}
       skipLabel="skip for now"
-      onSkip={next}
+      onSkip={() => next()}
     >
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }} />

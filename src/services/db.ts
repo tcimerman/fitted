@@ -8,7 +8,7 @@ let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 async function open(): Promise<SQLite.SQLiteDatabase> {
   if (!dbPromise) {
     dbPromise = (async () => {
-      const db = await SQLite.openDatabaseAsync('fitted.db');
+      const db = await SQLite.openDatabaseAsync('fitted.db'); // legacy file name, keep
       await migrate(db);
       return db;
     })();

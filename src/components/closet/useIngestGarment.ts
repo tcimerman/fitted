@@ -1,11 +1,14 @@
 // Shared ingestion flow: pick/shoot → store files → AI analysis → save garment
 // → queue white-bg enhancement. Saves immediately; enhancement patches in later.
+import { router } from 'expo-router';
 import React from 'react';
 import { toast } from '@/components/sorbet';
 import { friendlyError, isConfigured } from '@/services/gemini/client';
 import { analyzeGarment } from '@/services/gemini/analyzeGarment';
 import { queueEnhancement } from '@/services/gemini/enhanceGarment';
 import { pickImage, PickSource, storeGarmentPhoto } from '@/services/images';
+import { useProfileStore } from '@/store/useProfileStore';
+import { entitlementSnapshot } from '@/store/useSubscriptionStore';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { Garment } from '@/types';
 import { uid } from '@/utils';
@@ -17,6 +20,12 @@ export function useIngestGarment() {
   const [lastAdded, setLastAdded] = React.useState<Garment | null>(null);
 
   const ingest = React.useCallback(async (source: PickSource): Promise<Garment | null> => {
+    const { limits } = entitlementSnapshot();
+    if (useWardrobeStore.getState().garments.length >= limits.closetPieces) {
+      if (useProfileStore.getState().onboardingCompleted) router.push('/paywall?reason=closet' as never);
+      else toast(`free closet holds ${limits.closetPieces} pieces — that’s plenty to start`, 'lemon', 'hanger');
+      return null;
+    }
     setPhase('picking');
     const picked = await pickImage(source);
     if (!picked) {

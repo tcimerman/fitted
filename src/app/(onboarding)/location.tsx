@@ -39,14 +39,14 @@ export default function LocationStep() {
 
   return (
     <StepScaffold
-      kicker="04 · weather check"
+      kicker="weather check"
       title="where does the day find you?"
       body="we peek at the forecast so your fit matches the sky — sun, rain, or rogue cold snap."
       ctaLabel={asking ? 'asking…' : 'use my location'}
       ctaLoading={asking}
       onNext={askPermission}
       skipLabel="skip for now"
-      onSkip={next}
+      onSkip={() => next()}
     >
       {denied ? (
         <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 14 }}>

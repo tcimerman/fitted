@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { EnterIn, Garment, SButton } from '@/components/sorbet';
+import { EnterIn, Garment, SButton, SWordmark } from '@/components/sorbet';
 import { useOnboardingNav } from '@/components/onboarding/useOnboardingNav';
 import { colors } from '@/theme/tokens';
 import { fonts, type } from '@/theme/typography';
@@ -24,14 +24,12 @@ export default function Welcome() {
             <View key={c} style={{ width: 46, height: 14, borderRadius: 999, backgroundColor: c }} />
           ))}
         </View>
-        <Text style={{ fontFamily: fonts.display800, fontSize: 64, letterSpacing: -2.2, color: colors.plum, lineHeight: 66 }}>
-          fit<Text style={{ color: colors.punch }}>t</Text>ed
-        </Text>
+        <SWordmark size={54} />
         <Text style={{ fontFamily: fonts.display600, fontSize: 24, color: colors.plum, marginTop: 10 }}>
-          your fit, but make it fun.
+          spin your closet into a fit.
         </Text>
-        <Text style={[type.bodyMuted, { fontSize: 16, lineHeight: 24, marginTop: 14, maxWidth: 300 }]}>
-          the wardrobe helper that picks what to wear, every single day — from clothes you already own.
+        <Text style={[type.bodyMuted, { fontSize: 16, lineHeight: 24, marginTop: 14, maxWidth: 310 }]}>
+          your ai stylist picks what to wear every day — from clothes you already own, matched to the weather and your plans.
         </Text>
       </EnterIn>
       <EnterIn delay={150}>
@@ -44,9 +42,10 @@ export default function Welcome() {
         </View>
       </EnterIn>
       <View style={{ position: 'absolute', left: 24, right: 24, bottom: Math.max(insets.bottom, 16) + 8 }}>
-        <SButton variant="primary" size="lg" full icon="bolt" onPress={next}>
-          let&apos;s get you fitted
+        <SButton variant="primary" size="lg" full icon="bolt" onPress={() => next()}>
+          let&apos;s spin my first fit
         </SButton>
+        <Text style={[type.small, { textAlign: 'center', marginTop: 12 }]}>takes about 2 minutes · free to start</Text>
       </View>
     </View>
   );

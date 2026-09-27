@@ -23,11 +23,20 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastHost } from '@/components/sorbet';
 import { ensureDirs } from '@/services/images';
 import { useOutfitStore } from '@/store/useOutfitStore';
+import { usePlannerStore } from '@/store/usePlannerStore';
+import { useSubscriptionStore } from '@/store/useSubscriptionStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { colors } from '@/theme/tokens';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
+
+type Persisted = { persist: { hasHydrated: () => boolean; onFinishHydration: (fn: () => void) => () => void } };
+const hydrated = (store: Persisted) =>
+  new Promise<void>((resolve) => {
+    if (store.persist.hasHydrated()) resolve();
+    else store.persist.onFinishHydration(() => resolve());
+  });
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -52,6 +61,8 @@ export default function RootLayout() {
       await Promise.all([
         useWardrobeStore.getState().hydrate().catch(() => {}),
         useOutfitStore.getState().hydrate().catch(() => {}),
+        hydrated(useSubscriptionStore),
+        hydrated(usePlannerStore),
       ]);
       setDataReady(true);
     })();
@@ -80,6 +91,10 @@ export default function RootLayout() {
             <Stack.Screen name="try-on/[outfitId]" options={{ presentation: 'modal' }} />
             <Stack.Screen name="outfit/[id]" />
             <Stack.Screen name="dev/gallery" />
+            <Stack.Screen name="paywall" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="streak" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="planner" />
+            <Stack.Screen name="invite" options={{ presentation: 'modal' }} />
           </Stack.Protected>
         </Stack>
         <ToastHost />

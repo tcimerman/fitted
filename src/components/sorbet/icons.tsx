@@ -6,7 +6,8 @@ import Svg, { Circle, G, Line, Path } from 'react-native-svg';
 export type IconName =
   | 'sun' | 'hanger' | 'plus' | 'heart' | 'user' | 'search' | 'sliders' | 'check'
   | 'shuffle' | 'bolt' | 'cloud' | 'star' | 'arrowR' | 'arrowL' | 'chevronL' | 'chevronR'
-  | 'camera' | 'image' | 'trash' | 'gear' | 'pin' | 'mail' | 'x' | 'pencil' | 'send' | 'sparkle' | 'key';
+  | 'camera' | 'image' | 'trash' | 'gear' | 'pin' | 'mail' | 'x' | 'pencil' | 'send' | 'sparkle' | 'key'
+  | 'calendar' | 'flame' | 'gift' | 'crown' | 'share' | 'lock' | 'bell' | 'clock' | 'refresh';
 
 interface UIconProps {
   name: IconName;
@@ -108,6 +109,45 @@ export function UIcon({ name, size = 22, color = '#311938', stroke = 1.8, fill =
         <Path d="M11 11l8.5-8.5M16 6l3 3M13.5 8.5l2 2" {...p} />
       </G>
     ),
+    calendar: (
+      <G>
+        <Path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19V7A1.5 1.5 0 0 1 5 5.5z" {...p} />
+        <Path d="M3.5 10h17M8 3.5v4M16 3.5v4" {...p} />
+      </G>
+    ),
+    flame: <Path d="M12 21c-3.9 0-6.5-2.6-6.5-6.2 0-3.3 2.4-5.4 3.6-7.9.3 1.6 1.2 2.7 2.2 3.2-.1-2.9 1.4-5.6 3.7-7.1-.2 2.6.9 4.3 2.1 5.9 1 1.4 1.9 3 1.9 5.2 0 3.9-2.9 6.9-7 6.9z" {...p} fill={fill ? color : 'none'} />,
+    gift: (
+      <G>
+        <Path d="M4 10h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V10zM3 7h18v3H3zM12 7v14" {...p} />
+        <Path d="M12 7c-1.5-3-5-3.5-5-1.3C7 7 9.5 7 12 7zm0 0c1.5-3 5-3.5 5-1.3C17 7 14.5 7 12 7z" {...p} />
+      </G>
+    ),
+    crown: <Path d="M4 17.5 3 7l5 4 4-6 4 6 5-4-1 10.5H4zM4.5 20.5h15" {...p} fill={fill ? color : 'none'} />,
+    share: (
+      <G>
+        <Path d="M12 3.5v12M7.5 8 12 3.5 16.5 8" {...p} />
+        <Path d="M5 12.5v6a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-6" {...p} />
+      </G>
+    ),
+    lock: (
+      <G>
+        <Path d="M6 10.5h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z" {...p} />
+        <Path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" {...p} />
+      </G>
+    ),
+    bell: (
+      <G>
+        <Path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15l1.5-2z" {...p} />
+        <Path d="M10 20.5a2 2 0 0 0 4 0" {...p} />
+      </G>
+    ),
+    clock: (
+      <G>
+        <Circle cx="12" cy="12" r="8.5" {...p} />
+        <Path d="M12 7.5V12l3 2" {...p} />
+      </G>
+    ),
+    refresh: <Path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4.5H15" {...p} />,
   };
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
