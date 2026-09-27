@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Confetti, EnterIn, SButton, SPlusBadge } from '@/components/sorbet';
 import { useEntitlements } from '@/store/useSubscriptionStore';
+import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { colors } from '@/theme/tokens';
 import { type } from '@/theme/typography';
@@ -12,6 +13,8 @@ export default function DoneStep() {
   const name = useProfileStore((s) => s.profile.name);
   const completeOnboarding = useProfileStore((s) => s.completeOnboarding);
   const { isPlus, limits } = useEntitlements();
+  const pieces = useWardrobeStore((s) => s.garments.length);
+  const lead = pieces > 0 ? 'closet’s stocked, vibes are set.' : 'vibes are set — add a few pieces and the stylist takes it from there.';
   const [run, setRun] = React.useState(0);
   React.useEffect(() => {
     const t = setTimeout(() => setRun(1), 350);
@@ -29,13 +32,13 @@ export default function DoneStep() {
         </Text>
         <Text style={[type.bodyMuted, { fontSize: 16, lineHeight: 24, marginTop: 14, maxWidth: 300 }]}>
           {isPlus
-            ? 'closet’s stocked, vibes are set, unlimited spins unlocked. let’s find today’s fit.'
-            : `closet’s stocked, vibes are set. you’ve got ${limits.spinsPerDay} free spins a day — let’s use the first one.`}
+            ? `${lead} unlimited spins unlocked.`
+            : `${lead} you’ve got ${limits.spinsPerDay} free spins a day.`}
         </Text>
       </EnterIn>
       <View style={{ position: 'absolute', left: 24, right: 24, bottom: Math.max(insets.bottom, 16) + 8 }}>
         <SButton variant="primary" size="lg" full icon="sparkle" onPress={completeOnboarding}>
-          spin today’s fit
+          {pieces > 0 ? 'spin today’s fit' : 'let’s go'}
         </SButton>
       </View>
     </View>

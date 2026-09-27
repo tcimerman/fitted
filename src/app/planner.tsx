@@ -76,13 +76,13 @@ export default function PlannerScreen() {
 
   const openOnToday = (o: Outfit) => {
     setSuggestions([o], o.occasion);
-    router.navigate('/' as never);
+    router.navigate('/(tabs)' as never);
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.petal, paddingTop: insets.top + 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, marginBottom: 6 }}>
-        <SIconButton icon="arrowL" size={42} onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} accessibilityLabel="back" />
+        <SIconButton icon="arrowL" size={42} onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)' as never))} accessibilityLabel="back" />
         <Text style={[type.h1, { flex: 1 }]}>your week</Text>
         {isPlus ? <SPlusBadge size="sm" /> : null}
       </View>
@@ -146,7 +146,7 @@ export default function PlannerScreen() {
                   {pool.length === 0 ? (
                     <View style={{ alignItems: 'center', gap: 10, padding: 14, backgroundColor: colors.white, borderRadius: radii.tile, borderWidth: 1.5, borderColor: colors.rule }}>
                       <Text style={[type.small, { textAlign: 'center' }]}>no fits to plan yet — spin some on today, or heart one you love.</Text>
-                      <SButton size="sm" icon="shuffle" onPress={() => router.navigate('/' as never)}>spin on today</SButton>
+                      <SButton size="sm" icon="shuffle" onPress={() => router.navigate('/(tabs)' as never)}>spin on today</SButton>
                     </View>
                   ) : (
                     pool.map((o) => (

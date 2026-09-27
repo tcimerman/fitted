@@ -10,6 +10,6 @@ export default function PaywallModal() {
   const router = useRouter();
   const { reason } = useLocalSearchParams<{ reason?: string }>();
   const r = (REASONS.includes(reason as PaywallReason) ? reason : 'profile') as PaywallReason;
-  const close = () => (router.canGoBack() ? router.back() : router.replace('/'));
+  const close = () => (router.canGoBack() ? router.back() : router.replace('/(tabs)' as never));
   return <PaywallView reason={r} onDone={close} />;
 }

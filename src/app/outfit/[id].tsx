@@ -28,7 +28,7 @@ export default function OutfitDetail() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.petal, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <Text style={type.bodyMuted}>this lewk is gone</Text>
-        <SButton variant="ghost" icon="arrowL" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}>back</SButton>
+        <SButton variant="ghost" icon="arrowL" onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)' as never))}>back</SButton>
       </View>
     );
   }

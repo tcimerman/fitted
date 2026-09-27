@@ -28,7 +28,7 @@ export default function StreakScreen() {
     return () => clearTimeout(t);
   }, []);
 
-  const close = () => (router.canGoBack() ? router.back() : router.replace('/'));
+  const close = () => (router.canGoBack() ? router.back() : router.replace('/(tabs)' as never));
 
   const seeOnMe = () => {
     if (!outfitId) return close();

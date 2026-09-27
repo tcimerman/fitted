@@ -33,7 +33,7 @@ export default function InviteScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.lemonSoft, paddingTop: insets.top + 10 }}>
       <View style={{ alignItems: 'flex-end', paddingHorizontal: 20 }}>
-        <SIconButton icon="x" size={40} onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} accessibilityLabel="close" />
+        <SIconButton icon="x" size={40} onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)' as never))} accessibilityLabel="close" />
       </View>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: insets.bottom + 30 }}>
         <EnterIn style={{ alignItems: 'center' }}>
